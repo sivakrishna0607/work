@@ -8,7 +8,7 @@ import yaml
 
 # connection = MySQLdb.connect(database='loanfront', host="localhost", user="root", passwd="root")
 # cursor = connection.cursor()
-
+#
 connection = MySQLdb.connect('cf-rds-dev.cluster-coolstqbhxhn.ap-south-1.rds.amazonaws.com', 'cf_rds_my_dev_ad', 'RecOngiRtiOnthEChaRGYNOCkUlAtERF', 'loanfront')
 cursor = connection.cursor()
 
@@ -50,12 +50,12 @@ def scan_table_allpages(table_name):
         lastkey = yaml.load(lastkey1[1])
     else:
         response = table.scan()
-        #sql = 'INSERT INTO dynamo_lastkey(TABLE_NAME,LASTKEY,COUNT)VALUES({},"{}",{})'.format(repr(table_name),
-        #                                                                                  response.get('LastEvaluatedKey'),
-        #                                                                                  len(response['Items']))
-        #cursor.execute(sql)
-        #lastkey = response.get('LastEvaluatedKey')
-        #connection.commit()
+        sql = 'INSERT INTO dynamo_lastkey(TABLE_NAME,LASTKEY,COUNT)VALUES({},"{}",{})'.format(repr(table_name),
+                                                                                         response.get('LastEvaluatedKey'),
+                                                                                         len(response['Items']))
+        cursor.execute(sql)
+        # lastkey = response.get('LastEvaluatedKey')
+        connection.commit()
     counter = 0
     while True:
         counter += 1
@@ -149,7 +149,7 @@ def Data_transfer(Tname, fields, change):  # execute this function only
             connection.commit()
             Etime = datetime.datetime.now()
             status = "Sucess"
-            # print("Sucessfully Data Insert into MySQl DataBase")
+            print("Sucessfully Data Insert into MySQl DataBase")
         except Exception as e:
             print("Exception:\t", Tname, e)
             Etime = datetime.datetime.now()
